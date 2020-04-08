@@ -30,7 +30,6 @@ router.get("/logout", (req, res) => {
 router.get(
   "/callback",
   catchAsync(async (req, res) => {
-    console.log(req.query);
     if (!req.query.code) throw new Error("NoCodeProvided");
     const code = req.query.code;
     const creds = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);

@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "btoa": "^1.2.1",
+    "concurrently": "^5.1.0",
     "cookie-parser": "~1.4.5",
     "cors": "^2.8.5",
     "debug": "~4.1.1",
@@ -15,7 +16,9 @@
     "http-errors": "~1.7.3",
     "morgan": "~1.10.0",
     "node-fetch": "^2.6.0",
-    "stripe": "^8.39.0"
+    "random-token": "0.0.8",
+    "stripe": "^8.39.0",
+    "uuid": "^7.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

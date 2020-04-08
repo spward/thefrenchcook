@@ -3,11 +3,13 @@ var express = require("express");
 var path = require("path");
 var logger = require("morgan");
 var cors = require("cors");
+
 require("dotenv").config();
 
 var port = process.env.PORT;
 var discordRouter = require("./routes/discord");
 var stripeRouter = require("./routes/stripe");
+var tokenRouter = require("./routes/token");
 
 var app = express();
 
@@ -20,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", discordRouter);
 app.use("/membership", stripeRouter);
+app.use("/token", tokenRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

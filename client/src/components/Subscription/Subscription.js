@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./Subscription.scss";
 const Subscription = () => {
   const [token, setToken] = useState("");
+
   useEffect(() => {
     if (!token) {
       fetch(`http://localhost:9000/token/generate`)
         .then((res) => res.text())
-        .then((response) => setToken(response));
+        .then((response) => setToken(response))
+        .catch((err) => console.log(err));
     }
   });
 
-  console.log(token);
   return (
     <div className="subscription">
       <h3>Subscription Information</h3>

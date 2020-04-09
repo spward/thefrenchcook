@@ -9,7 +9,6 @@ import "./Dashboard.scss";
 const stripePromise = loadStripe("pk_test_qXQRiA7KUmNC3RmZIVr81R9C00p88oCKkd");
 
 const Dashboard = ({ userInfo, history, error, backendChecked, code }) => {
-  console.log(history);
   useEffect(() => {
     if (
       (!userInfo || (userInfo && !userInfo.email)) &&
@@ -27,8 +26,8 @@ const Dashboard = ({ userInfo, history, error, backendChecked, code }) => {
         <div className="dashboard">
           <Elements stripe={stripePromise}>
             <Payment userInfo={userInfo} />
+            <Subscription />
           </Elements>
-          <Subscription />
         </div>
       ) : null}
     </React.Fragment>

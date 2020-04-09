@@ -20,38 +20,48 @@ const Payment = ({ userInfo }) => {
       type: "card",
       card: elements.getElement(CardElement),
       billing_details: {
-        email: userInfo.email,
+        email: "wardsean15@gmail.com",
       },
     });
 
     function stripePaymentMethodHandler(result, email) {
       if (result.error) {
-        console.log(result.error);
       } else {
         // Otherwise send paymentMethod.id to your server
-        fetch("localhost:9000/stripe/create-customer", {
+        fetch("/create-customer", {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: userInfo.email,
+            email: email,
             payment_method: result.paymentMethod.id,
           }),
         })
-          .then(function (result) {
+          .then((result) => {
             return result.json();
           })
-          .then(function (customer) {
-            fetch("localhost:9000/stripe/create-subscription", {
-              method: "post",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                customer: customer.id,
-              }),
-            })
-              .then(function (result) {
-                return result.json();
-              })
-              .then(function (subscription) {});
+          .then((subscription) => {
+            const { latest_invoice } = subscription;
+            const { payment_intent } = latest_invoice;
+
+            if (payment_intent) {
+              const { client_secret, status } = payment_intent;
+
+              if (status === "requires_action") {
+                stripe
+                  .confirmCardPayment(client_secret)
+                  .then(function (result) {
+                    if (result.error) {
+                      // Display error message in your UI.
+                      // The card was declined (i.e. insufficient funds, card has expired, etc)
+                    } else {
+                      // Show a success message to your customer
+                    }
+                  });
+              } else {
+                // No additional information was needed
+                // Show a success message to your customer
+              }
+            }
           });
       }
     }

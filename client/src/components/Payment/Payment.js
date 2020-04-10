@@ -20,15 +20,16 @@ const Payment = ({ userInfo }) => {
       type: "card",
       card: elements.getElement(CardElement),
       billing_details: {
-        email: "wardsean15@gmail.com",
+        email: userInfo.email,
       },
     });
 
-    function stripePaymentMethodHandler(result, email) {
+    const stripePaymentMethodHandler = (result, email) => {
       if (result.error) {
+        alert("Submit error:", result.error.message);
       } else {
         // Otherwise send paymentMethod.id to your server
-        fetch("/create-customer", {
+        fetch("http://localhost:9000/membership/create-customer", {
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -51,10 +52,10 @@ const Payment = ({ userInfo }) => {
                   .confirmCardPayment(client_secret)
                   .then(function (result) {
                     if (result.error) {
-                      // Display error message in your UI.
-                      // The card was declined (i.e. insufficient funds, card has expired, etc)
+                      alert("confirmed payment error:", result.error.message);
                     } else {
                       // Show a success message to your customer
+                      confirmSubscription(subscription.id);
                     }
                   });
               } else {
@@ -62,9 +63,28 @@ const Payment = ({ userInfo }) => {
                 // Show a success message to your customer
               }
             }
-          });
+          })
+          .catch((err) => console.log(err));
       }
-    }
+    };
+
+    const confirmSubscription = (subscriptionId) => {
+      return fetch("http://localhost:9000/membership/subscription", {
+        method: "post",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          subscriptionId: subscriptionId,
+        }),
+      })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (subscription) {
+          alert(subscription.status);
+        });
+    };
 
     stripePaymentMethodHandler(result);
   };

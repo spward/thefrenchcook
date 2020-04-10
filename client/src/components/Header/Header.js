@@ -18,14 +18,15 @@ const Header = ({ userInfo, handleLogout }) => {
               <img
                 src={`https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.jpg`}
                 className="profile__pic"
+                alt="users discord avatar"
               />
             ) : (
               "no avatar is set for this user"
             )}
-            <a onClick={handleLogout}>Logout</a>
+            <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
-      ) : null}{" "}
+      ) : null}
     </React.Fragment>
   );
 };
